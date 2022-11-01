@@ -121,7 +121,6 @@ function openWin(e) {
 
     (function detectWinClose() {
         if (win.closed) {
-            console.log('closed');
             app.innerHTML = '';
 
             getDevengersElements();
@@ -198,7 +197,6 @@ function getDevengersElements() {
 
     return getAsyncAccessToken()
         .then(access_token => {
-            console.log(localStorage.getItem('loggedIn'))
             if (localStorage.getItem('loggedIn') === '1') {
                 return fetch('https://www.googleapis.com/drive/v3/files?q=%271ZKwJPKXIKXI5YdSwV3mICWsC2eUq-kj0%27%20in%20parents&fields=*&key='+ApiKey, {
                     method: 'get',

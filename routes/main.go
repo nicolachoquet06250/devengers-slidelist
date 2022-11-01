@@ -3,11 +3,12 @@ package routes
 import (
 	"devengers-slidelist/googleDrive"
 	_ "embed"
-	"github.com/gorilla/mux"
-	"google.golang.org/api/drive/v3"
 	"html/template"
 	"net/http"
 	"os"
+
+	"github.com/gorilla/mux"
+	"google.golang.org/api/drive/v3"
 )
 
 //go:embed templates/oauth.html
@@ -33,7 +34,6 @@ func Routes() {
 			drive.DriveScope, drive.DriveAppdataScope,
 			drive.DriveFileScope, drive.DriveMetadataScope,
 			drive.DriveMetadataReadonlyScope, drive.DrivePhotosReadonlyScope,
-			drive.DriveReadonlyScope,
 		}
 
 		cred := googleDrive.GetCredentials()

@@ -10,21 +10,6 @@ import (
 )
 
 func main() {
-	/*if len(os.Args) > 1 {
-		var args []string
-		for i, a := range os.Args {
-			if i > 0 {
-				args = append(args, a)
-			}
-		}
-
-		if args[0] == "oauth" {
-			googleDrive.Main()
-		}
-
-		os.Exit(0)
-	}*/
-
 	routes.Routes()
 
 	IP := os.Getenv("IP")
@@ -36,7 +21,7 @@ func main() {
 
 	err := http.ListenAndServe(IP+":"+PORT, nil)
 	if err != nil {
-		if strings.Contains(err.Error(), "invalid port") == true {
+		if strings.Contains(err.Error(), "invalid port") {
 			println(err.Error())
 		} else {
 			log.Fatal(err)
