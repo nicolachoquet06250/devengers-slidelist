@@ -19,6 +19,14 @@ func main() {
 		IP = fmt.Sprintf(`[%s]`, IP)
 	}
 
+	if IP == "" {
+		IP = "localhost"
+	}
+
+	if PORT == "" {
+		PORT = "80"
+	}
+
 	err := http.ListenAndServe(IP+":"+PORT, nil)
 	if err != nil {
 		if strings.Contains(err.Error(), "invalid port") {
