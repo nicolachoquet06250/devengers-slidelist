@@ -9,9 +9,12 @@ import (
 	"strings"
 )
 
-func main() {
-	routes.Routes()
+type RequiredEnv struct {
+	IP   string
+	PORT string
+}
 
+func GetEnv() RequiredEnv {
 	IP := os.Getenv("IP")
 	PORT := os.Getenv("PORT")
 
@@ -27,7 +30,15 @@ func main() {
 		PORT = "80"
 	}
 
-	err := http.ListenAndServe(IP+":"+PORT, nil)
+	return RequiredEnv{IP, PORT}
+}
+
+func main() {
+	routes.Routes()
+
+	var env = GetEnv()
+
+	err := http.ListenAndServe(env.IP+":"+env.PORT, nil)
 	if err != nil {
 		if strings.Contains(err.Error(), "invalid port") {
 			println(err.Error())
