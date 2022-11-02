@@ -6,6 +6,7 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="shortcut icon" href="/assets/png/logo.png"/>
+  <link rel="manifest" href="/manifest.json"/>
   <title>Devengers SlideList</title>
 
   <script type="module">
@@ -22,6 +23,14 @@
     };
 
     func();
+  </script>
+  
+  <script>
+    window.addEventListener("load", () => {
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/service-worker.js");
+      }
+    });
   </script>
 
   <link rel="stylesheet"

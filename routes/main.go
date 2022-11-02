@@ -33,6 +33,11 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 	cred := googleDrive.GetCredentials()
 	oauthUrl := googleDrive.GenerateOAuthURL(cred, scopes...)
 
+	referer := os.Getenv("CLIENT_HOSTNAME")
+	if os.Getenv("CLIENT_PORT") != "80" && os.Getenv("CLIENT_PORT") != "443" {
+		referer = referer + ":" + os.Getenv("CLIENT_PORT")
+	}
+
 	tpl, _ := template.New("index").Parse(indexTpl)
 	err := tpl.Execute(w, struct {
 		LinkUrl      string
@@ -49,7 +54,7 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 		ClientID:     cred.Web.ClientID,
 		ClientSecret: cred.Web.ClientSecret,
 		RedirectURI:  cred.Web.RedirectUris[0],
-		Referer:      "http://" + os.Getenv("CLIENT_HOSTNAME") + ":" + os.Getenv("CLIENT_PORT"),
+		Referer:      referer,
 	})
 
 	if err != nil {
@@ -91,11 +96,50 @@ func GetAsset(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GetManifest(w http.ResponseWriter, r *http.Request) {
+	path, _ := os.Getwd()
+
+	w.Header().Set("Content-Type", "application/json")
+
+	content, err := os.ReadFile(path + "/routes/templates/manifest.json")
+	if err != nil {
+		panic(err)
+	}
+
+	tpl, _ := template.New("manifest").Parse(string(content))
+
+	startUrl := os.Getenv("CLIENT_HOSTNAME")
+	if os.Getenv("CLIENT_PORT") != "80" && os.Getenv("CLIENT_PORT") != "443" {
+		startUrl = startUrl + ":" + os.Getenv("CLIENT_PORT")
+	}
+
+	err = tpl.Execute(w, struct{ StartUrl string }{StartUrl: startUrl})
+	if err != nil {
+		panic(err)
+	}
+}
+
+func GetServiceWorker(w http.ResponseWriter, r *http.Request) {
+	path, _ := os.Getwd()
+	content, err := os.ReadFile(path + "/routes/templates/assets/js/service-worker.js")
+
+	if err == nil {
+		w.Header().Set("Content-Type", "text/javascript")
+		_, err = w.Write(content)
+	}
+
+	if err != nil {
+		panic(err)
+	}
+}
+
 func Routes() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", HomePage)
 	r.HandleFunc("/oauth", OAuthRedirectionPage)
+	r.HandleFunc("/manifest.json", GetManifest)
+	r.HandleFunc("/service-worker.js", GetServiceWorker)
 	r.HandleFunc("/assets/{type:[a-zA-Z0-9-_]+}/{file:[a-zA-Z0-9-_.]+}", GetAsset)
 
 	http.Handle("/", r)
