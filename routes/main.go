@@ -20,6 +20,7 @@ var indexTpl string
 var MimeTypes = map[string]string{
 	"css": "text/css",
 	"js":  "text/javascript",
+	"png": "image/png",
 }
 
 func HomePage(w http.ResponseWriter, r *http.Request) {
