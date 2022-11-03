@@ -154,18 +154,18 @@ nav {
     align-items: center;
 }
 
-nav > div:not([id]) {
+nav > #logo-container {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-nav > div:not([id]).logged > img {
+nav > #logo-container.logged > img {
     transform: translateX(0);
 }
 
-nav > div:not([id]) > img {
+nav > #logo-container > img {
     max-height: 100px;
     width: auto;
     transform: translateX(25px);

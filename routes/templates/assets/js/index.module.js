@@ -220,8 +220,8 @@ function getDevengersElements() {
              * @param {GoogleDriveAPIResponse} json
              */
             json => {
-                removeLoginLink(true);
                 createDOMPptxList(json.files);
+                removeLoginLink(true);
             }
         )
         .finally(removeLoader)
@@ -309,7 +309,7 @@ function createLoginLink() {
         a.removeAttribute('disabled', '');
         a.removeEventListener('click', disableClick);
         a.addEventListener('click', _openWin);
-        nav.querySelector('div:not([id])').classList.remove('logged')
+        nav.querySelector('#logo-container').classList.remove('logged');
     };
     const destroy = (complete = false) => {
         console.log('link destroyed');
@@ -318,7 +318,7 @@ function createLoginLink() {
         a.addEventListener('click', disableClick);
         complete && (() => {
             link.remove();
-            nav.querySelector('div:not([id])').classList.add('logged')
+            nav.querySelector('#logo-container').classList.add('logged');
         })()
     };
 
