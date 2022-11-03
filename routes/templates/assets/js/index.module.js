@@ -115,7 +115,7 @@ let removeLoginLink = () => {};
 function openWin(e) {
     e.preventDefault();
 
-    const url = e.target.href;
+    const url = this.href;
 
     const win = window.open(url, '', 'width=400,height=400,top=200,left=200');
 
@@ -195,7 +195,7 @@ function getAsyncAccessToken() {
 function getDevengersElements() {
     const { ApiKey } = window.params;
 
-    //const removeLoader = createLoader();
+    const removeLoader = createLoader();
 
     return getAsyncAccessToken()
         .then(access_token => {
@@ -224,7 +224,7 @@ function getDevengersElements() {
                 createDOMPptxList(json.files);
             }
         )
-        //.finally(removeLoader)
+        .finally(removeLoader)
 }
 
 function createLoader() {
@@ -302,17 +302,19 @@ function createLoginLink() {
     a.querySelector('i:first-child').style.marginRight = '2px'
     const disableClick = e => e.preventDefault();
 
+    const _openWin = openWin.bind(a)
+
     const init = () => {
         console.log('link init');
         a.removeAttribute('disabled', '');
         a.removeEventListener('click', disableClick);
-        a.addEventListener('click', openWin);
+        a.addEventListener('click', _openWin);
         nav.querySelector('div:not([id])').classList.remove('logged')
     };
     const destroy = (complete = false) => {
         console.log('link destroyed');
         a.setAttribute('disabled', '');
-        a.removeEventListener('click', openWin);
+        a.removeEventListener('click', _openWin);
         a.addEventListener('click', disableClick);
         complete && (() => {
             link.remove();

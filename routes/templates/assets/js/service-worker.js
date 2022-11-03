@@ -13,7 +13,7 @@ Copyright 2015, 2019 Google Inc. All Rights Reserved.
 
 // Incrementing OFFLINE_VERSION will kick off the install event and force
 // previously cached resources to be updated from the network.
-const PREFIX = "V1";
+const PREFIX = "V2";
 // Customize this with a different URL if needed.
 const OFFLINE_URL = '/';
 
