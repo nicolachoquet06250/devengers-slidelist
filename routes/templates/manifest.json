@@ -27,5 +27,11 @@
             "sizes": "512x512",
             "type": "image/png"
         }
+    ],
+    "protocol_handlers": [
+        {
+            "protocol": "web+devengerssl",
+            "url": "/?deep-link=%s"
+        }
     ]
 }

@@ -22,7 +22,7 @@ window.addEventListener("load", () => {
         document.querySelector('#installBtn').removeEventListener('click', install);
     }
 
-    function install() {
+    async function install() {
         if (beforeInstallPrompt) {
             beforeInstallPrompt.prompt();
             

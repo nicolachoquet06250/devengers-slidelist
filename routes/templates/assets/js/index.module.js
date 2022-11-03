@@ -315,6 +315,12 @@ export default function () {
     getDevengersElements().catch(err => {
         console.log(err)
 
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+
+        document.querySelector('#deep-link-label').innerText = params['deep-link'];
+
         removeLoginLink = createLoginLink();
     })
 };
