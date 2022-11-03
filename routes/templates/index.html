@@ -71,9 +71,26 @@
     </section>
   </template>
 
+  <template id="loader-tpl">
+    <div id="loader">
+      <span> Loading ... </span>
+    </div>
+  </template>
+
+  <template id="login-link">
+    <div id="login-link-container">
+      <a href="{{.LinkUrl}}&referer={{.Referer}}" class="login" target="_blank">
+        <i class="fa-brands fa-google"></i>
+        <i class="fa-brands fa-google-drive"></i>
+      </a>
+    </div>
+  </template>
+
   <main>
     <nav>
-      <img src="/assets/png/logo.png" alt="Norsys Devengers" class="logo">
+      <div>
+        <img src="/assets/png/logo.png" alt="Norsys Devengers" class="logo">
+      </div>
 
       <!--<a href="sms:0763207630?body=Bonjour\nJe vous contacte pour ...">
         Contactez moi par texto

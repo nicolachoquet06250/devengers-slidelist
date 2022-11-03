@@ -195,6 +195,8 @@ function getAsyncAccessToken() {
 function getDevengersElements() {
     const { ApiKey } = window.params;
 
+    //const removeLoader = createLoader();
+
     return getAsyncAccessToken()
         .then(access_token => {
             if (localStorage.getItem('loggedIn') === '1') {
@@ -218,10 +220,23 @@ function getDevengersElements() {
              * @param {GoogleDriveAPIResponse} json
              */
             json => {
-                removeLoginLink();
+                removeLoginLink(true);
                 createDOMPptxList(json.files);
             }
         )
+        //.finally(removeLoader)
+}
+
+function createLoader() {
+    const body = document.body;
+    const loader = document.querySelector('#loader-tpl')
+        .cloneNode(true).content.firstElementChild;
+
+    body.appendChild(loader);
+    
+    return () => {
+        loader.remove();
+    };
 }
 
 /**
@@ -238,7 +253,8 @@ function createDOMPptxList(files) {
          * @const
          * @type {HTMLElement}
          */
-        const pptxTpl = document.querySelector('#pptx-card').cloneNode(true).content.firstElementChild;
+        const pptxTpl = document.querySelector('#pptx-card')
+            .cloneNode(true).content.firstElementChild;
 
         Array.from(pptxTpl.querySelectorAll('[data]')).map(e => {
             e.getAttributeNames().filter(a => a.startsWith('data-')).map(a => {
@@ -264,7 +280,6 @@ function createDOMPptxList(files) {
         container.appendChild(pptxTpl);
     }
 
-    app.innerHTML = '';
     app.appendChild(container);
 }
 
@@ -277,14 +292,14 @@ const tools = {
 };
 
 function createLoginLink() {
-    const { LinkUrl, LinkLabel, Referer } = window.params;
+    const nav = document.querySelector('nav');
+    const link = document.querySelector('#login-link')
+        .cloneNode(true).content.firstElementChild;
 
-    const a = document.createElement('a');
-    a.href = `${LinkUrl}&referrer=${Referer}`.replace(/"/g, '');
-    a.target = '_blank';
-    a.innerText = LinkLabel.replace(/"/g, '');
-    a.classList.add('login');
+    const a = link.querySelector('a');
 
+    a.href = a.href.replace(/"/g, '');
+    a.querySelector('i:first-child').style.marginRight = '2px'
     const disableClick = e => e.preventDefault();
 
     const init = () => {
@@ -292,19 +307,23 @@ function createLoginLink() {
         a.removeAttribute('disabled', '');
         a.removeEventListener('click', disableClick);
         a.addEventListener('click', openWin);
+        nav.querySelector('div:not([id])').classList.remove('logged')
     };
-    const destroy = () => {
+    const destroy = (complete = false) => {
         console.log('link destroyed');
         a.setAttribute('disabled', '');
         a.removeEventListener('click', openWin);
         a.addEventListener('click', disableClick);
+        complete && (() => {
+            link.remove();
+            nav.querySelector('div:not([id])').classList.add('logged')
+        })()
     };
 
     window.addEventListener('offline', destroy);
     window.addEventListener('online', init);
 
-    app.innerHTML = '';
-    app.appendChild(a);
+    nav.appendChild(link);
 
     init();
 

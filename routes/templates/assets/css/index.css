@@ -9,6 +9,7 @@ body > main {
     height: 100vh;
     width: 100vw;
     overflow: auto;
+    z-index: 0;
 }
 
 a.login {
@@ -146,9 +147,28 @@ nav {
     align-items: center;
 }
 
-nav > img {
+#login-link-container {
+    width: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nav > div:not([id]) {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nav > div:not([id]).logged > img {
+    transform: translateX(0);
+}
+
+nav > div:not([id]) > img {
     max-height: 100px;
     width: auto;
+    transform: translateX(25px);
 }
 
 /* PWA Banner */
@@ -208,4 +228,19 @@ nav > img {
     font-weight: bold;
     color: red;
     cursor: pointer;
+}
+
+#loader {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    width: 100vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
