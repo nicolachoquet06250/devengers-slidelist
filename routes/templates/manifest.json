@@ -10,22 +10,44 @@
         {
             "src": "/assets/png/icon-192x192.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "color_scheme": "light"
         },
         {
             "src": "/assets/png/icon-256x256.png",
             "sizes": "256x256",
-            "type": "image/png"
+            "type": "image/png",
+            "color_scheme": "light"
         },
         {
             "src": "/assets/png/icon-384x384.png",
             "sizes": "384x384",
-            "type": "image/png"
+            "type": "image/png",
+            "color_scheme": "light"
         },
         {
             "src": "/assets/png/icon-512x512.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "color_scheme": "light"
+        },
+        {
+            "src": "/assets/png/icon-dark-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "color_scheme": "dark"
+        },
+        {
+            "src": "/assets/png/icon-dark-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png",
+            "color_scheme": "dark"
+        },
+        {
+            "src": "/assets/png/icon-dark-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "color_scheme": "dark"
         }
     ],
     "protocol_handlers": [
