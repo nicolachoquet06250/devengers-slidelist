@@ -319,7 +319,9 @@ export default function () {
             get: (searchParams, prop) => searchParams.get(prop),
         });
 
-        document.querySelector('#deep-link-label').innerText = params['deep-link'];
+        if (document.querySelector('#deep-link-label')) {
+            document.querySelector('#deep-link-label').innerText = params['deep-link'] ?? '';
+        }
 
         removeLoginLink = createLoginLink();
     })
