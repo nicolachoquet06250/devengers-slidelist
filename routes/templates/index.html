@@ -10,7 +10,7 @@
   <title>Devengers SlideList</title>
 
   <script type="module">
-    import func from './assets/js/index.js';
+    import func from './assets/js/index.module.js';
 
     window.params = {
       LinkUrl: '{{.LinkUrl}}',
@@ -25,13 +25,7 @@
     func();
   </script>
   
-  <script>
-    window.addEventListener("load", () => {
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/service-worker.js");
-      }
-    });
-  </script>
+  <script src="/assets/js/index.js"></script>
 
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -82,5 +76,17 @@
   </nav>
 
   <div id="app"></div>
+
+  <div id="install-pwa-alert">
+    <div id="install-button-container">
+      <button id="installBtn" disabled> 
+          {{.InstallButtonLabel}} 
+      </button>
+    </div>
+
+    <div id="close-container">
+      <button id="close"> X </button>
+    </div>
+  </div>
 </body>
 </html>

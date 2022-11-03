@@ -9,6 +9,17 @@ import (
 	"google.golang.org/api/drive/v3"
 )
 
+type HomePageTemplateParams struct {
+	LinkUrl            string
+	LinkLabel          string
+	ApiKey             string
+	ClientID           string
+	ClientSecret       string
+	RedirectURI        string
+	Referer            string
+	InstallButtonLabel string
+}
+
 func homePage(w http.ResponseWriter, r *http.Request) {
 	scopes := []string{
 		drive.DriveScope, drive.DriveAppdataScope,
@@ -26,13 +37,14 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 
 	tpl, _ := template.New("index").Parse(indexTpl)
 	err := tpl.Execute(w, HomePageTemplateParams{
-		LinkUrl:      oauthUrl,
-		LinkLabel:    "Je me connect",
-		ApiKey:       "AIzaSyAqH8eFIa42MngvvKTWNCXNY5jBPhDkTIs",
-		ClientID:     cred.Web.ClientID,
-		ClientSecret: cred.Web.ClientSecret,
-		RedirectURI:  cred.Web.RedirectUris[0],
-		Referer:      referer,
+		LinkUrl:            oauthUrl,
+		LinkLabel:          "Je me connect",
+		ApiKey:             "AIzaSyAqH8eFIa42MngvvKTWNCXNY5jBPhDkTIs",
+		ClientID:           cred.Web.ClientID,
+		ClientSecret:       cred.Web.ClientSecret,
+		RedirectURI:        cred.Web.RedirectUris[0],
+		Referer:            referer,
+		InstallButtonLabel: `Installe "Devengers SlideList"`,
 	})
 
 	if err != nil {

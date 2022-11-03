@@ -22,26 +22,6 @@ var MimeTypes = map[string]string{
 	"png": "image/png",
 }
 
-type (
-	HomePageTemplateParams struct {
-		LinkUrl      string
-		LinkLabel    string
-		ApiKey       string
-		ClientID     string
-		ClientSecret string
-		RedirectURI  string
-		Referer      string
-	}
-
-	OAuthRedirectionPageTemplateParams struct {
-		Token string
-	}
-
-	ManifestTemplateParams struct {
-		StartUrl string
-	}
-)
-
 func Routes() {
 	r := mux.NewRouter()
 

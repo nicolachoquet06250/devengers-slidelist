@@ -6,6 +6,10 @@ import (
 	"os"
 )
 
+type ManifestTemplateParams struct {
+	StartUrl string
+}
+
 func getManifest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
