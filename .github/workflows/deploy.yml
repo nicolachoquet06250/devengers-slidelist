@@ -20,4 +20,4 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          if [ -d "./${{ secrets.SERVER_DIST }}" ]; then cd ${{ secrets.SERVER_DIST }};git pull; else git clone https://github.com/${{github.repository}} fi;
+          if [ -d "./${{ secrets.SERVER_DIST }}" ]; then cd ${{ secrets.SERVER_DIST }};git pull; else git clone https://github.com/${{github.repository}}; fi;
