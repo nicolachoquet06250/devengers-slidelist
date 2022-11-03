@@ -6,8 +6,11 @@ window.addEventListener("load", () => {
     var beforeInstallPrompt = null;
     window.addEventListener("beforeinstallprompt", eventHandler, errorHandler);
 
-    function eventHandler(event) {
-        beforeInstallPrompt = event;
+    function eventHandler(e) {
+        e.preventDefault();
+
+        beforeInstallPrompt = e;
+
         document.querySelector('#installBtn').removeAttribute('disabled'); 
         document.querySelector('#installBtn').addEventListener('click', install);
         document.querySelector('#close').addEventListener('click', errorHandler);
@@ -16,11 +19,14 @@ window.addEventListener("load", () => {
 
     function errorHandler(e) {
         console.log('error: ' + e);
+
         document.querySelector('#install-pwa-alert').classList.remove('show');
         document.querySelector('#installBtn').removeEventListener('click', install);
     }
 
     function install() {
-        if (beforeInstallPrompt) beforeInstallPrompt.prompt();
+        if (beforeInstallPrompt) {
+            beforeInstallPrompt.prompt();
+        }
     }
   });
