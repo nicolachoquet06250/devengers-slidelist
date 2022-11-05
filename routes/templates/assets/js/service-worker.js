@@ -13,7 +13,7 @@ Copyright 2015, 2019 Google Inc. All Rights Reserved.
 
 // Incrementing OFFLINE_VERSION will kick off the install event and force
 // previously cached resources to be updated from the network.
-const PREFIX = "V3";
+const PREFIX = "V4";
 // Customize this with a different URL if needed.
 const OFFLINE_URL = '/';
 
@@ -69,16 +69,17 @@ self.addEventListener('fetch', (event) => {
     event.respondWith((async () => {
       try {
         // First, try to use the navigation preload response if it's supported.
-        /*const preloadResponse = await event.preloadResponse;
+        const preloadResponse = await event.preloadResponse;
         if (preloadResponse) {
+          console.log("step 1");
           return preloadResponse;
-        }*/
+        }
 
         const cache = await caches.open(PREFIX);
         cache.add(event.request, {cache: 'reload'})
 
-        const networkResponse = await fetch(event.request);
-        return networkResponse;
+        console.log("step 2");
+        return await fetch(event.request);
       } catch (error) {
         /*catch is only triggered if an exception is thrown, which is likely
         due to a network error.
@@ -86,6 +87,7 @@ self.addEventListener('fetch', (event) => {
         the 4xx or 5xx range, the catch() will NOT be called.*/
         console.log('Fetch failed; returning offline page instead.', error);
 
+        console.log("step 3");
         const cache = await caches.open(PREFIX);
         return await cache.match(OFFLINE_URL);
       }
@@ -95,6 +97,7 @@ self.addEventListener('fetch', (event) => {
       const cache = await caches.open(PREFIX);
       if (event.request.url.startsWith("{{.Hostname}}")) {
         if (event.request.url.indexOf('{{.Hostname}}/oauth') !== -1) {
+          console.log("step 4");
           return await fetch(event.request);
         }
 
@@ -107,6 +110,7 @@ self.addEventListener('fetch', (event) => {
           
           cache.add(event.request, {cache: 'reload'})
   
+          console.log("step 5");
           return await fetch(event.request);
         } catch (error) {
           /*catch is only triggered if an exception is thrown, which is likely
@@ -115,15 +119,18 @@ self.addEventListener('fetch', (event) => {
           the 4xx or 5xx range, the catch() will NOT be called.*/
           //console.log('Fetch failed; returning offline page instead.', error);
   
+          console.log("step 6");
           const cache = await caches.open(PREFIX);
           return await cache.match(event.request.url);
         }
       } else if ((await cache.keys()).map(r => r.url).indexOf(event.request.url) !== -1) {
+        console.log("step 7");
         return await cache.match(event.request.url);
       }
 
       //console.log(`Not navigate and not current domain : ${event.request.url}`);
 
+      console.log("step 8");
       return await fetch(event.request);
     })())
   }

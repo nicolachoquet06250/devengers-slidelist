@@ -14,6 +14,8 @@ var (
 	indexTpl embed.FS
 	//go:embed templates/manifest.json
 	manifestTpl embed.FS
+	//go:embed templates/test_bluetooth_api.html
+	testBluetoothApiTpl embed.FS
 )
 
 func AuthTpl() (string, error) {
@@ -34,6 +36,12 @@ func ManifestTpl() (string, error) {
 	return string(c), err
 }
 
+func TestBluetoothApiTpl() (string, error) {
+	c, err := testBluetoothApiTpl.ReadFile("templates/test_bluetooth_api.html")
+
+	return string(c), err
+}
+
 var MimeTypes = map[string]string{
 	"css": "text/css",
 	"js":  "text/javascript",
@@ -44,6 +52,7 @@ func Routes() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", homePage)
+	r.HandleFunc("/bluetooth", testBluetoothApiPage)
 	r.HandleFunc("/oauth", oAuthRedirectionPage)
 	r.HandleFunc("/manifest.json", getManifest)
 	r.HandleFunc("/service-worker.js", getServiceWorker)

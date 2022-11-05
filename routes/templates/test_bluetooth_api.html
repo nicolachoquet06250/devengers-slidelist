@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <meta name="googlebot" content="noindex">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/assets/png/logo.png"/>
+    <title>Test de l'API JavaScript bluetooth</title>
+
+    <script>
+        window.addEventListener('load', () => {
+            if ('bluetooth' in navigator) {
+                document.querySelector('button').addEventListener('click', () => {
+                    navigator.bluetooth.requestDevice({
+                        filters: [
+                            {
+                                services: ['battery_service']
+                            }
+                        ]
+                    })
+                    .then(device => device.gatt.connect())
+                    .then(server => {
+                        // Getting Battery Service…
+                        return server.getPrimaryService('battery_service');
+                    })
+                    .then(service => {
+                        // Getting Battery Level Characteristic…
+                        return service.getCharacteristic('battery_level');
+                    })
+                    .then(characteristic => {
+                        // Reading Battery Level…
+                        return characteristic.readValue();
+                    })
+                    .then(value => {
+                        console.log(`Battery percentage is ${value.getUint8(0)}`);
+                        document.querySelector('#app').innerHTML = `<h1>Battery percentage is ${value.getUint8(0)}</h1>`;
+                    })
+                    .catch(error => { 
+                        console.error(error);
+                    });
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    <button>Afficher le niveau de batterie</button>
+    <main id="app"></main>
+</body>
+</html>
