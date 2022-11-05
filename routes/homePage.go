@@ -35,6 +35,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 		referer = referer + ":" + os.Getenv("CLIENT_PORT")
 	}
 
+	indexTpl, _ := IndexTpl()
 	tpl, _ := template.New("index").Parse(indexTpl)
 	err := tpl.Execute(w, HomePageTemplateParams{
 		LinkUrl:            oauthUrl,

@@ -33,12 +33,18 @@ func GetEnv() RequiredEnv {
 	return RequiredEnv{IP, PORT}
 }
 
-func main() {
+func ListenAndServe(addr string, handler http.Handler) (*http.Server, error) {
+	server := &http.Server{Addr: addr, Handler: handler}
+	return server, server.ListenAndServe()
+}
+
+func StartServer() *http.Server {
 	routes.Routes()
 
 	var env = GetEnv()
 
-	err := http.ListenAndServe(env.IP+":"+env.PORT, nil)
+	server, err := ListenAndServe(env.IP+":"+env.PORT, nil)
+
 	if err != nil {
 		if strings.Contains(err.Error(), "invalid port") {
 			println(err.Error())
@@ -46,4 +52,23 @@ func main() {
 			log.Fatal(err)
 		}
 	}
+
+	return server
+}
+
+func RestartServer(server *http.Server) {
+	server.Close()
+	server.ListenAndServe()
+}
+
+func main() {
+	/*server :*/ _ = StartServer()
+
+	/*signals := make(chan os.Signal)
+	signal.Notify(signals, syscall.SIGHUP)
+	for sig := range signals {
+		if sig == syscall.SIGHUP {
+			RestartServer(server)
+		}
+	}*/
 }

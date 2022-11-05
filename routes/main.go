@@ -1,7 +1,7 @@
 package routes
 
 import (
-	_ "embed"
+	"embed"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -9,12 +9,30 @@ import (
 
 var (
 	//go:embed templates/oauth.html
-	authTpl string
+	authTpl embed.FS
 	//go:embed templates/index.html
-	indexTpl string
+	indexTpl embed.FS
 	//go:embed templates/manifest.json
-	manifestTpl string
+	manifestTpl embed.FS
 )
+
+func AuthTpl() (string, error) {
+	c, err := authTpl.ReadFile("templates/oauth.html")
+
+	return string(c), err
+}
+
+func IndexTpl() (string, error) {
+	c, err := indexTpl.ReadFile("templates/index.html")
+
+	return string(c), err
+}
+
+func ManifestTpl() (string, error) {
+	c, err := manifestTpl.ReadFile("templates/manifest.json")
+
+	return string(c), err
+}
 
 var MimeTypes = map[string]string{
 	"css": "text/css",

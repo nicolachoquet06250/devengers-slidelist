@@ -10,6 +10,7 @@ type OAuthRedirectionPageTemplateParams struct {
 }
 
 func oAuthRedirectionPage(w http.ResponseWriter, r *http.Request) {
+	authTpl, _ := AuthTpl()
 	tpl, _ := template.New("auth").Parse(authTpl)
 	err := tpl.Execute(w, OAuthRedirectionPageTemplateParams{
 		Token: r.URL.Query().Get("code"),

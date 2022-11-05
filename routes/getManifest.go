@@ -13,6 +13,7 @@ type ManifestTemplateParams struct {
 func getManifest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
+	manifestTpl, _ := ManifestTpl()
 	tpl, _ := template.New("manifest").Parse(manifestTpl)
 
 	startUrl := os.Getenv("CLIENT_HOSTNAME")
