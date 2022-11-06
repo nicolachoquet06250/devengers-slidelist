@@ -167,25 +167,29 @@ function getAsyncAccessToken() {
             })
         })
             .then(async r => {
-                if (!r.ok) {
-                    throw new Error(JSON.stringify(await r.json()))
+                if (r) {
+                    if (!r.ok) {
+                        throw new Error(JSON.stringify(await r.json()))
+                    }
+                    return r.json()
                 }
-                return r.json()
             })
             .then(json => {
-                const {access_token, expires_in, refresh_token, token_type} = json;
+                if (json) {
+                    const {access_token, expires_in, refresh_token, token_type} = json;
 
-                localStorage.setItem('googleOAuthAccessToken', access_token);
-                if (refresh_token) {
-                    localStorage.setItem('googleOAuthToken', refresh_token);
+                    localStorage.setItem('googleOAuthAccessToken', access_token);
+                    if (refresh_token) {
+                        localStorage.setItem('googleOAuthToken', refresh_token);
+                    }
+                    localStorage.setItem('googleOAuthExpiresIn', expires_in);
+                    localStorage.setItem('googleOAuthTokenType', token_type);
+                    localStorage.setItem('googleOAuthEndTimestamp', (Date.now() / 1000) + expires_in);
+
+                    localStorage.setItem('loggedIn', '1');
+
+                    return access_token;
                 }
-                localStorage.setItem('googleOAuthExpiresIn', expires_in);
-                localStorage.setItem('googleOAuthTokenType', token_type);
-                localStorage.setItem('googleOAuthEndTimestamp', (Date.now() / 1000) + expires_in);
-
-                localStorage.setItem('loggedIn', '1');
-
-                return access_token;
             })
     }
 
