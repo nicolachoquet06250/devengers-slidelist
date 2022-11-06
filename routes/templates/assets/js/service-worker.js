@@ -78,7 +78,7 @@ self.addEventListener('fetch', (event) => {
         const cache = await caches.open(PREFIX);
         cache.add(event.request, {cache: 'reload'})
 
-        console.log("step 2");
+        //console.log("step 2");
         return await fetch(event.request);
       } catch (error) {
         /*catch is only triggered if an exception is thrown, which is likely
@@ -87,7 +87,7 @@ self.addEventListener('fetch', (event) => {
         the 4xx or 5xx range, the catch() will NOT be called.*/
         console.log('Fetch failed; returning offline page instead.', error);
 
-        console.log("step 3");
+        //console.log("step 3");
         const cache = await caches.open(PREFIX);
         return await cache.match(OFFLINE_URL);
       }
@@ -97,7 +97,7 @@ self.addEventListener('fetch', (event) => {
       const cache = await caches.open(PREFIX);
       if (event.request.url.startsWith("{{.Hostname}}")) {
         if (event.request.url.indexOf('{{.Hostname}}/oauth') !== -1) {
-          console.log("step 4");
+          //console.log("step 4");
           return await fetch(event.request);
         }
 
@@ -110,7 +110,7 @@ self.addEventListener('fetch', (event) => {
           
           cache.add(event.request, {cache: 'reload'})
   
-          console.log("step 5");
+          //console.log("step 5");
           return await fetch(event.request);
         } catch (error) {
           /*catch is only triggered if an exception is thrown, which is likely
@@ -119,18 +119,18 @@ self.addEventListener('fetch', (event) => {
           the 4xx or 5xx range, the catch() will NOT be called.*/
           //console.log('Fetch failed; returning offline page instead.', error);
   
-          console.log("step 6");
+          //console.log("step 6");
           const cache = await caches.open(PREFIX);
           return await cache.match(event.request.url);
         }
       } else if ((await cache.keys()).map(r => r.url).indexOf(event.request.url) !== -1) {
-        console.log("step 7");
+        //console.log("step 7");
         return await cache.match(event.request.url);
       }
 
       //console.log(`Not navigate and not current domain : ${event.request.url}`);
 
-      console.log("step 8");
+      //console.log("step 8");
       return await fetch(event.request);
     })())
   }

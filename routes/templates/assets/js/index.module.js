@@ -154,6 +154,10 @@ function getAsyncAccessToken() {
 
         const { ClientID: client_id, ClientSecret: client_secret, RedirectURI: redirect_uri } = window.params;
 
+        if (!localStorage.getItem('googleOAuthToken')) {
+            return Promise.reject('token indisponible');
+        }
+
         return fetch('https://oauth2.googleapis.com/token', {
             method: 'post',
             headers: {
@@ -167,29 +171,25 @@ function getAsyncAccessToken() {
             })
         })
             .then(async r => {
-                if (r) {
-                    if (!r.ok) {
-                        throw new Error(JSON.stringify(await r.json()))
-                    }
-                    return r.json()
+                if (!r.ok) {
+                    throw new Error(JSON.stringify(await r.json()))
                 }
+                return r.json()
             })
             .then(json => {
-                if (json) {
-                    const {access_token, expires_in, refresh_token, token_type} = json;
+                const {access_token, expires_in, refresh_token, token_type} = json;
 
-                    localStorage.setItem('googleOAuthAccessToken', access_token);
-                    if (refresh_token) {
-                        localStorage.setItem('googleOAuthToken', refresh_token);
-                    }
-                    localStorage.setItem('googleOAuthExpiresIn', expires_in);
-                    localStorage.setItem('googleOAuthTokenType', token_type);
-                    localStorage.setItem('googleOAuthEndTimestamp', (Date.now() / 1000) + expires_in);
-
-                    localStorage.setItem('loggedIn', '1');
-
-                    return access_token;
+                localStorage.setItem('googleOAuthAccessToken', access_token);
+                if (refresh_token) {
+                    localStorage.setItem('googleOAuthToken', refresh_token);
                 }
+                localStorage.setItem('googleOAuthExpiresIn', expires_in);
+                localStorage.setItem('googleOAuthTokenType', token_type);
+                localStorage.setItem('googleOAuthEndTimestamp', (Date.now() / 1000) + expires_in);
+
+                localStorage.setItem('loggedIn', '1');
+
+                return access_token;
             })
     }
 
@@ -203,7 +203,7 @@ function getDevengersElements() {
 
     return getAsyncAccessToken()
         .then(access_token => {
-            if (localStorage.getItem('loggedIn') === '1') {
+            if (access_token && localStorage.getItem('loggedIn') === '1') {
                 return fetch('https://www.googleapis.com/drive/v3/files?q=%271ZKwJPKXIKXI5YdSwV3mICWsC2eUq-kj0%27%20in%20parents&fields=*&key='+ApiKey, {
                     method: 'get',
                     headers: {
@@ -212,12 +212,13 @@ function getDevengersElements() {
                     }
                 })
             }
+            throw new Error('le token n\'est pas disponible');
         })
         .then(async r => {
             if (!r.ok) {
                 throw new Error(JSON.stringify(await r.json()))
             }
-            return r.json()
+            return r.json();
         })
         .then(
             /**
@@ -358,9 +359,9 @@ function createInternetConnectionLostBanner() {
 
 async function updateDevengersElementsDOM() {
     try {
-        getDevengersElements();
+        await getDevengersElements();
     } catch (err) {
-        console.log(err)
+        console.error(err)
 
         const params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
