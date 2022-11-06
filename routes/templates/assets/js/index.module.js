@@ -253,7 +253,7 @@ function createDOMPptxList(files) {
          * @const
          * @type {HTMLElement}
          */
-        const pptxTpl = document.querySelector('#pptx-card')
+        const pptxTpl = document.querySelector('#pptx-card-tpl')
             .cloneNode(true).content.firstElementChild;
 
         Array.from(pptxTpl.querySelectorAll('[data]')).map(e => {
@@ -293,7 +293,7 @@ const tools = {
 
 function createLoginLink() {
     const nav = document.querySelector('nav');
-    const link = document.querySelector('#login-link')
+    const link = document.querySelector('#login-link-tpl')
         .cloneNode(true).content.firstElementChild;
 
     const a = link.querySelector('a');
@@ -332,8 +332,30 @@ function createLoginLink() {
     return destroy;
 }
 
-export default function () {
-    getDevengersElements().catch(err => {
+function createInternetConnectionLostBanner() {
+    const container = document.body;
+    const internetLostAlertOverlay = document.querySelector('#internet-lost-banner-tpl')
+        .cloneNode(true).content.firstElementChild;
+
+    container.appendChild(internetLostAlertOverlay);
+    internetLostAlertOverlay.classList.remove('hide');
+
+    return () => {
+        internetLostAlertOverlay.classList.add('hide');
+        const handleTransitionEnd = () => {
+            internetLostAlertOverlay.remove();
+            internetLostAlertOverlay.removeEventListener('transitionend', handleTransitionEnd);
+        };
+        internetLostAlertOverlay.addEventListener('transitionend', handleTransitionEnd);
+
+        updateDevengersElementsDOM();
+    };
+}
+
+async function updateDevengersElementsDOM() {
+    try {
+        getDevengersElements();
+    } catch (err) {
         console.log(err)
 
         const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -345,5 +367,24 @@ export default function () {
         }
 
         removeLoginLink = createLoginLink();
-    })
+    }
+}
+
+export default function () {
+    updateDevengersElementsDOM();
+
+    let removeInternetConnectionLostBanner = null;
+
+    const online = 'onLine' in navigator ? navigator.onLine : true;
+
+    const createBanner = () => (removeInternetConnectionLostBanner = createInternetConnectionLostBanner());
+
+    if (!online) createBanner();
+
+    window.addEventListener('offline', createBanner);
+
+    window.addEventListener('online', () => {
+        removeInternetConnectionLostBanner();
+        removeInternetConnectionLostBanner = null;
+    });
 };

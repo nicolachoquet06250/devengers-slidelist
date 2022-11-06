@@ -13,7 +13,7 @@ Copyright 2015, 2019 Google Inc. All Rights Reserved.
 
 // Incrementing OFFLINE_VERSION will kick off the install event and force
 // previously cached resources to be updated from the network.
-const PREFIX = "V4";
+const PREFIX = "V1";
 // Customize this with a different URL if needed.
 const OFFLINE_URL = '/';
 
@@ -70,10 +70,10 @@ self.addEventListener('fetch', (event) => {
       try {
         // First, try to use the navigation preload response if it's supported.
         const preloadResponse = await event.preloadResponse;
-        if (preloadResponse) {
+        /*if (preloadResponse) {
           console.log("step 1");
           return preloadResponse;
-        }
+        }*/
 
         const cache = await caches.open(PREFIX);
         cache.add(event.request, {cache: 'reload'})

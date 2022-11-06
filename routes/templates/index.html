@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="assets/css/index.css" />
 </head>
 <body>
-  <template id="pptx-card">
+  <template id="pptx-card-tpl">
     <section class="card">
       <header class="card-screenshot">
         <img data data-src="thumbnailLink" data-alt="name"
@@ -88,12 +88,20 @@
     </div>
   </template>
 
-  <template id="login-link">
+  <template id="login-link-tpl">
     <div id="login-link-container">
       <a href="{{.LinkUrl}}&referer={{.Referer}}" class="login" target="_blank">
         <i class="fa-brands fa-google"></i>
         <i class="fa-brands fa-google-drive"></i>
       </a>
+    </div>
+  </template>
+
+  <template id="internet-lost-banner-tpl">
+    <div class="overlay alert-overlay hide">
+      <div class="alert">
+        Vous avez perdu la connexion internet
+      </div>
     </div>
   </template>
 

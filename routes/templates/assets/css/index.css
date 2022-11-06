@@ -190,6 +190,7 @@ nav > #logo-container > img {
 
 #install-pwa-alert.show {
     transform: translateY(0);
+    z-index: 1;
 }
 
 #close-container {
@@ -231,6 +232,8 @@ nav > #logo-container > img {
     cursor: pointer;
 }
 
+/* Page loader */
+
 #loader {
     position: absolute;
     top: 0;
@@ -250,6 +253,8 @@ nav > #logo-container > img {
     width: 100%;
     max-width: 800px;
 }
+
+/* Page loader : Spiner */
 
 .lds-roller {
     display: inline-block;
@@ -335,4 +340,39 @@ nav > #logo-container > img {
         transform: rotate(360deg);
     }
 }
-  
+
+/* Lost connection banner */
+
+.overlay.alert-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, .5);
+    z-index: 0;
+    backdrop-filter: blur(.5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    opacity: 1;
+    transition: opacity .2s ease-out;
+}
+
+.overlay.alert-overlay.hide {
+    opacity: 0;
+}
+
+.overlay.alert-overlay > .alert {
+    margin: 5px;
+    width: calc(100% - 5px * 2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
