@@ -196,10 +196,35 @@ function getAsyncAccessToken() {
     return Promise.resolve(localStorage.getItem('googleOAuthAccessToken'));
 }
 
+/**
+ * @returns {Array<File>}
+ */
+function getDevengersSlides() {
+    return 'devengersSlides' in window ? window.devengersSlides : [];
+}
+
+/**
+ * @param {Array<File>} files 
+ */
+function setDevengersSlides(files) {
+    window.devengersSlides = files;
+}
+
 function getDevengersElements() {
     const { ApiKey } = window.params;
 
     const removeLoader = createLoader();
+
+    /**
+     * @param {GoogleDriveAPIResponse} json
+     */
+    const handleFinalThen = json => {
+        if (json) {
+            setDevengersSlides(json.files);
+        }
+        createDOMPptxList(getDevengersSlides());
+        removeLoginLink(true);
+    }
 
     return getAsyncAccessToken()
         .then(access_token => {
@@ -220,16 +245,8 @@ function getDevengersElements() {
             }
             return r.json();
         })
-        .then(
-            /**
-             * @param {GoogleDriveAPIResponse} json
-             */
-            json => {
-                createDOMPptxList(json.files);
-                removeLoginLink(true);
-            }
-        )
-        .finally(removeLoader)
+        .then(handleFinalThen)
+        .finally(removeLoader);
 }
 
 function createLoader() {
@@ -285,6 +302,7 @@ function createDOMPptxList(files) {
         container.appendChild(pptxTpl);
     }
 
+    document.querySelector('.container')?.remove();
     app.appendChild(container);
 }
 
