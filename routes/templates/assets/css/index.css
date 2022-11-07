@@ -166,6 +166,10 @@ nav > #logo-container.logged > img {
     transform: translateX(0);
 }
 
+nav > #logo-container:not(.logged) > img {
+    max-width: calc(100% - 70px);
+}
+
 nav > #logo-container > img {
     max-height: 100px;
     width: auto;
