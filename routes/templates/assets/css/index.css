@@ -145,6 +145,7 @@ nav {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-bottom: 10px;
 }
 
 #login-link-container {
